@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -88,6 +89,25 @@ public class MedicineController {
 			
 			return ResponseEntity.status(HttpStatus.OK).body(
 					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), updatedMed));
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
+		}
+
+	}
+	
+	@DeleteMapping("/{medicineId}")
+	public ResponseEntity<ApiResponse> deleteMedicine(@PathVariable String medicineId) {
+		try {
+			Medicine medicine = medicineService.getMedince(medicineId);
+			if(null==medicine) {
+				return ResponseEntity.status(HttpStatus.OK).body(
+						new ApiResponse(StatusType.NOT_FOUND.getCode(), StatusType.NOT_FOUND.getName(), "Invalid Medicine Id"));
+			}
+			medicineService.deleteMedicine(medicineId);
+			return ResponseEntity.status(HttpStatus.OK).body(
+					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(),"Medicine : " + medicine.getMedicineId()
+					+ "deleted successfully"));
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));

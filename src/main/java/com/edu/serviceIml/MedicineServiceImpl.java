@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,30 +42,97 @@ public class MedicineServiceImpl implements MedicineService {
 
 	@Override
 	public Medicine updateMedicine(Medicine medicine, Medicine updatedMedicine) {
-		
-		medicine.setName(updatedMedicine.getName());
-	    medicine.setDescription(updatedMedicine.getDescription());
-	    medicine.setManufacturer(updatedMedicine.getManufacturer());
-	    medicine.setCategory(updatedMedicine.getCategory());
-	    medicine.setDosageForm(updatedMedicine.getDosageForm());
-	    medicine.setActiveIngredients(updatedMedicine.getActiveIngredients());
-	    medicine.setStorageConditions(updatedMedicine.getStorageConditions());
-	    medicine.setSideEffects(updatedMedicine.getSideEffects());
-	    medicine.setUsageInstructions(updatedMedicine.getUsageInstructions());
-	    medicine.setPrescriptionRequired(updatedMedicine.getPrescriptionRequired());
-	    medicine.setAvailability(updatedMedicine.getAvailability());
-	    medicine.setImage(updatedMedicine.getImage());
-	    medicine.setBarCode(updatedMedicine.getBarCode());
-	    medicine.setUnitPrice(updatedMedicine.getUnitPrice());
-	    medicine.setPrice(updatedMedicine.getPrice());
-	    medicine.setRemark(updatedMedicine.getRemark());
-	    medicine.setTotalSaleAmount(updatedMedicine.getTotalSaleAmount());
-	    medicine.setQuantitySold(updatedMedicine.getQuantitySold());
-	    medicine.setQuantityLeft(updatedMedicine.getQuantityLeft());
-	    medicine.setSalesRevenue(updatedMedicine.getSalesRevenue());
-	    medicine.setLastSaleDate(updatedMedicine.getLastSaleDate());
+		if (null != updatedMedicine.getName()) {
+		    medicine.setName(updatedMedicine.getName());
+		}
+
+		if (null != updatedMedicine.getDescription()) {
+		    medicine.setDescription(updatedMedicine.getDescription());
+		}
+
+		if (null != updatedMedicine.getManufacturer()) {
+		    medicine.setManufacturer(updatedMedicine.getManufacturer());
+		}
+
+		if (null != updatedMedicine.getCategory()) {
+		    medicine.setCategory(updatedMedicine.getCategory());
+		}
+
+		if (null != updatedMedicine.getDosageForm()) {
+		    medicine.setDosageForm(updatedMedicine.getDosageForm());
+		}
+
+		if (null != updatedMedicine.getActiveIngredients()) {
+		    medicine.setActiveIngredients(updatedMedicine.getActiveIngredients());
+		}
+
+		if (null != updatedMedicine.getStorageConditions()) {
+		    medicine.setStorageConditions(updatedMedicine.getStorageConditions());
+		}
+
+		if (null != updatedMedicine.getSideEffects()) {
+		    medicine.setSideEffects(updatedMedicine.getSideEffects());
+		}
+
+		if (null != updatedMedicine.getUsageInstructions()) {
+		    medicine.setUsageInstructions(updatedMedicine.getUsageInstructions());
+		}
+
+		if (null != updatedMedicine.getPrescriptionRequired()) {
+		    medicine.setPrescriptionRequired(updatedMedicine.getPrescriptionRequired());
+		}
+
+		if (null != updatedMedicine.getAvailability()) {
+		    medicine.setAvailability(updatedMedicine.getAvailability());
+		}
+
+		if (null != updatedMedicine.getImage()) {
+		    medicine.setImage(updatedMedicine.getImage());
+		}
+
+		if (null != updatedMedicine.getBarCode()) {
+		    medicine.setBarCode(updatedMedicine.getBarCode());
+		}
+
+		if (null != updatedMedicine.getUnitPrice()) {
+		    medicine.setUnitPrice(updatedMedicine.getUnitPrice());
+		}
+
+		if (null != updatedMedicine.getPrice()) {
+		    medicine.setPrice(updatedMedicine.getPrice());
+		}
+
+		if (null != updatedMedicine.getRemark()) {
+		    medicine.setRemark(updatedMedicine.getRemark());
+		}
+
+		if (null != updatedMedicine.getTotalSaleAmount()) {
+		    medicine.setTotalSaleAmount(updatedMedicine.getTotalSaleAmount());
+		}
+
+		if (null != updatedMedicine.getQuantitySold()) {
+		    medicine.setQuantitySold(updatedMedicine.getQuantitySold());
+		}
+
+		if (null != updatedMedicine.getQuantityLeft()) {
+		    medicine.setQuantityLeft(updatedMedicine.getQuantityLeft());
+		}
+
+		if (null != updatedMedicine.getSalesRevenue()) {
+		    medicine.setSalesRevenue(updatedMedicine.getSalesRevenue());
+		}
+
+		if (null != updatedMedicine.getLastSaleDate()) {
+		    medicine.setLastSaleDate(updatedMedicine.getLastSaleDate());
+		}
+
 	    medicine.setUpdatedDate(LocalDateTime.now());
 	    return medicineRepository.save(medicine);
+	}
+
+	@Override
+	public void deleteMedicine(String medicineId) {
+		medicineRepository.deleteById(medicineId);
 	}
 
 }

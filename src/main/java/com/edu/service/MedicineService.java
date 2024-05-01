@@ -17,5 +17,7 @@ public interface MedicineService {
 
 	public Medicine updateMedicine(Medicine medicine, Medicine updatedMedicine);
 
+	public void deleteMedicine(String medicineId);
+
 	
 }
