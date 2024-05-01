@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "medicines")
+@Table(name = "medicine")
 public class Medicine {
     
 	@Id
@@ -43,6 +43,12 @@ public class Medicine {
     private BigDecimal unitPrice; 
     private BigDecimal price; 
     private String remark;
+    private BigDecimal totalSaleAmount;
+	private Integer quantitySold;
+	private Integer quantityLeft;
+	private BigDecimal salesRevenue;
+	private LocalDateTime lastSaleDate;
+
     
     @CreationTimestamp
     @Column(name = "created_date", nullable = false, updatable = false)
@@ -51,8 +57,6 @@ public class Medicine {
     @UpdateTimestamp
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
-    
-    @OneToOne(mappedBy = "medicine", cascade = CascadeType.ALL)
-    private MedicineAnalytics analytics;
+ 
 
 }
