@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.edu.entity.Medicine;
+import com.edu.exception.ErrorType;
+import com.edu.exception.SystemException;
 import com.edu.repository.MedicineRepository;
 import com.edu.service.MedicineService;
 
@@ -31,103 +33,115 @@ public class MedicineServiceImpl implements MedicineService {
 
 	@Override
 	public List<Medicine> getAllMedince() {
-		
+
 		return medicineRepository.findAll();
 	}
 
-	public Medicine getMedince(String medicineId) {
-		return medicineRepository.findBymedicineId(medicineId);
+	public Medicine getMedince(String medicineId) throws SystemException {
+		Medicine medicine = medicineRepository.findBymedicineId(medicineId);
+		if (null == medicine) {
+			throw new SystemException(ErrorType.INVALID_MEDINCINE_ID, "Invalid MedicineId");
+		}
+		return medicine;
 	}
 
-
 	@Override
-	public Medicine updateMedicine(Medicine medicine, Medicine updatedMedicine) {
-		if (null != updatedMedicine.getName()) {
-		    medicine.setName(updatedMedicine.getName());
+	public Medicine updateMedicine(String medicineId, Medicine updatedMedicine) throws SystemException {
+
+		Medicine medicine = getMedince(medicineId);
+		if (null == medicine) {
+			throw new SystemException(ErrorType.INVALID_MEDINCINE_ID, "Invalid MedicineId");
+		}
+		if (null == updatedMedicine) {
+			throw new SystemException(ErrorType.MISSING_PARAM, "Invalid Medicine details");
+		}
+
+		if (StringUtils.isNotBlank(updatedMedicine.getName())) {
+			medicine.setName(updatedMedicine.getName());
 		}
 
 		if (null != updatedMedicine.getDescription()) {
-		    medicine.setDescription(updatedMedicine.getDescription());
+			medicine.setDescription(updatedMedicine.getDescription());
 		}
 
 		if (null != updatedMedicine.getManufacturer()) {
-		    medicine.setManufacturer(updatedMedicine.getManufacturer());
+			medicine.setManufacturer(updatedMedicine.getManufacturer());
 		}
 
 		if (null != updatedMedicine.getCategory()) {
-		    medicine.setCategory(updatedMedicine.getCategory());
+			medicine.setCategory(updatedMedicine.getCategory());
 		}
 
 		if (null != updatedMedicine.getDosageForm()) {
-		    medicine.setDosageForm(updatedMedicine.getDosageForm());
+			medicine.setDosageForm(updatedMedicine.getDosageForm());
 		}
 
 		if (null != updatedMedicine.getActiveIngredients()) {
-		    medicine.setActiveIngredients(updatedMedicine.getActiveIngredients());
+			medicine.setActiveIngredients(updatedMedicine.getActiveIngredients());
 		}
 
 		if (null != updatedMedicine.getStorageConditions()) {
-		    medicine.setStorageConditions(updatedMedicine.getStorageConditions());
+			medicine.setStorageConditions(updatedMedicine.getStorageConditions());
 		}
 
 		if (null != updatedMedicine.getSideEffects()) {
-		    medicine.setSideEffects(updatedMedicine.getSideEffects());
+			medicine.setSideEffects(updatedMedicine.getSideEffects());
 		}
 
 		if (null != updatedMedicine.getUsageInstructions()) {
-		    medicine.setUsageInstructions(updatedMedicine.getUsageInstructions());
+			medicine.setUsageInstructions(updatedMedicine.getUsageInstructions());
 		}
 
 		if (null != updatedMedicine.getPrescriptionRequired()) {
-		    medicine.setPrescriptionRequired(updatedMedicine.getPrescriptionRequired());
+			medicine.setPrescriptionRequired(updatedMedicine.getPrescriptionRequired());
 		}
 
 		if (null != updatedMedicine.getAvailability()) {
-		    medicine.setAvailability(updatedMedicine.getAvailability());
+			medicine.setAvailability(updatedMedicine.getAvailability());
 		}
 
 		if (null != updatedMedicine.getImage()) {
-		    medicine.setImage(updatedMedicine.getImage());
+			medicine.setImage(updatedMedicine.getImage());
 		}
 
 		if (null != updatedMedicine.getBarCode()) {
-		    medicine.setBarCode(updatedMedicine.getBarCode());
+			medicine.setBarCode(updatedMedicine.getBarCode());
 		}
 
-		if (null != updatedMedicine.getUnitPrice()) {
-		    medicine.setUnitPrice(updatedMedicine.getUnitPrice());
+		if (StringUtils.isNotBlank(updatedMedicine.getName())) {
+			medicine.setUnitPrice(updatedMedicine.getUnitPrice());
 		}
 
 		if (null != updatedMedicine.getPrice()) {
-		    medicine.setPrice(updatedMedicine.getPrice());
+			medicine.setPrice(updatedMedicine.getPrice());
 		}
 
 		if (null != updatedMedicine.getRemark()) {
-		    medicine.setRemark(updatedMedicine.getRemark());
+			medicine.setRemark(updatedMedicine.getRemark());
 		}
 
 		if (null != updatedMedicine.getTotalSaleAmount()) {
-		    medicine.setTotalSaleAmount(updatedMedicine.getTotalSaleAmount());
+			medicine.setTotalSaleAmount(updatedMedicine.getTotalSaleAmount());
 		}
 
 		if (null != updatedMedicine.getQuantitySold()) {
-		    medicine.setQuantitySold(updatedMedicine.getQuantitySold());
+			medicine.setQuantitySold(updatedMedicine.getQuantitySold());
 		}
 
 		if (null != updatedMedicine.getQuantityLeft()) {
-		    medicine.setQuantityLeft(updatedMedicine.getQuantityLeft());
+			medicine.setQuantityLeft(updatedMedicine.getQuantityLeft());
 		}
 
 		if (null != updatedMedicine.getSalesRevenue()) {
-		    medicine.setSalesRevenue(updatedMedicine.getSalesRevenue());
+			medicine.setSalesRevenue(updatedMedicine.getSalesRevenue());
 		}
 
 		if (null != updatedMedicine.getLastSaleDate()) {
-		    medicine.setLastSaleDate(updatedMedicine.getLastSaleDate());
+			medicine.setLastSaleDate(updatedMedicine.getLastSaleDate());
 		}
 
-	    medicine.setUpdatedDate(LocalDateTime.now());
-	    return medicineRepository.save(medicine);
+		medicine.setUpdatedDate(LocalDateTime.now());
+		return medicineRepository.save(medicine);
 	}
 
 	@Override

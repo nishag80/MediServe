@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edu.entity.Medicine;
+import com.edu.exception.SystemException;
 import com.edu.service.MedicineService;
 import com.edu.utility.ApiResponse;
 import com.edu.utility.RequestValidator;
@@ -57,15 +58,13 @@ public class MedicineController {
 	}
 	
 	@GetMapping("/{medicineId}")
-	public ResponseEntity<ApiResponse> getMedicine(@PathVariable String medicineId) {
+	public ResponseEntity<ApiResponse> getMedicine(@PathVariable String medicineId) throws SystemException {
 		try {
 			Medicine medicines = medicineService.getMedince(medicineId);
-			if(null==medicines) {
-				return ResponseEntity.status(HttpStatus.OK).body(
-						new ApiResponse(StatusType.NOT_FOUND.getCode(), StatusType.NOT_FOUND.getName(), "Invalid Medicine Id"));
-			}
 			return ResponseEntity.status(HttpStatus.OK).body(
 					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), medicines));
+		} catch (SystemException e) {
+	        throw e;
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
@@ -74,21 +73,14 @@ public class MedicineController {
 	}
 	
 	@PutMapping("/{medicineId}")
-	public ResponseEntity<ApiResponse> updateMedicine(@RequestBody Medicine updatedMedicine,@PathVariable String medicineId) {
+	public ResponseEntity<ApiResponse> updateMedicine(@RequestBody Medicine updatedMedicine,@PathVariable String medicineId) throws SystemException {
 		try {
-			Medicine medicine = medicineService.getMedince(medicineId);
-			if(null==medicine) {
-				return ResponseEntity.status(HttpStatus.OK).body(
-						new ApiResponse(StatusType.NOT_FOUND.getCode(), StatusType.NOT_FOUND.getName(), "Invalid Medicine Id"));
-			}
-			if(null==updatedMedicine) {
-				return ResponseEntity.status(HttpStatus.OK).body(
-						new ApiResponse(StatusType.MISSING_PARAM.getCode(), StatusType.MISSING_PARAM.getName(), "Invalid updated Details"));
-			}
-			Medicine updatedMed = medicineService.updateMedicine(medicine,updatedMedicine);
+			Medicine updatedMed = medicineService.updateMedicine(medicineId,updatedMedicine);
 			
 			return ResponseEntity.status(HttpStatus.OK).body(
 					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), updatedMed));
+		} catch (SystemException e) {
+	        throw e;
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
@@ -100,10 +92,6 @@ public class MedicineController {
 	public ResponseEntity<ApiResponse> deleteMedicine(@PathVariable String medicineId) {
 		try {
 			Medicine medicine = medicineService.getMedince(medicineId);
-			if(null==medicine) {
-				return ResponseEntity.status(HttpStatus.OK).body(
-						new ApiResponse(StatusType.NOT_FOUND.getCode(), StatusType.NOT_FOUND.getName(), "Invalid Medicine Id"));
-			}
 			medicineService.deleteMedicine(medicineId);
 			return ResponseEntity.status(HttpStatus.OK).body(
 					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(),"Medicine : " + medicine.getMedicineId()
