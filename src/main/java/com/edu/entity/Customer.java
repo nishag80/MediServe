@@ -11,25 +11,25 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//@Data
-//@Builder
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 public class Customer {
 
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
-//	private String customerId;
-//
-//	@Column(nullable = false)
-//	private String name;
-//
-//	@Column(nullable = false)
-//	private String phoneNumbers;
-//
-//	private String address;
-//
-//	private String pinCode;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long customerId;
+
+	@Column(nullable = false)
+	private String name;
+
+	@Column(nullable = false)
+	private String phoneNumbers;
+
+	private String address;
+
+	private String pinCode;
 
 }

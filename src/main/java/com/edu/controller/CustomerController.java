@@ -14,30 +14,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edu.entity.Medicine;
+import com.edu.entity.Customer;
 import com.edu.exception.SystemException;
-import com.edu.service.MedicineService;
+import com.edu.service.CustomerService;
 import com.edu.utility.ApiResponse;
 import com.edu.utility.RequestValidator;
 import com.edu.utility.StatusType;
 
 @RestController
-@RequestMapping("/api/v1/medicine")
-public class MedicineController {
-
+@RequestMapping("/api/v1/customer")
+public class CustomerController {
+	
 	@Autowired
-	private MedicineService medicineService;
+	private CustomerService customerService;
 
 	@Autowired
 	private RequestValidator requestValidator;
 
 	@PostMapping("/create")
-	public ResponseEntity<ApiResponse> createMedicine(@RequestBody Medicine medicine) {
+	public ResponseEntity<ApiResponse> createCustomer(@RequestBody Customer customer) {
 		try {
-			requestValidator.validateMedicineRequest(medicine);
-			Medicine createdMedicine = medicineService.createMedicine(medicine);
+			requestValidator.validateCustomerRequest(customer);
+			Customer createdCustomer = customerService.createCustomer(customer);
 			return ResponseEntity.status(HttpStatus.CREATED).body(
-					new ApiResponse(StatusType.SUCCESS.getName(), "Medicine created successfully", createdMedicine));
+					new ApiResponse(StatusType.SUCCESS.getName(), "Customer created successfully", createdCustomer));
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
@@ -45,9 +45,9 @@ public class MedicineController {
 	}
 
 	@GetMapping
-	public ResponseEntity<ApiResponse> getAllMedicine() {
+	public ResponseEntity<ApiResponse> getAllCustomer() {
 		try {
-			List<Medicine> allMedicines = medicineService.getAllMedince();
+			List<Customer> allMedicines = customerService.getAllCustomer();
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(
 					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), allMedicines));
 		} catch (Exception ex) {
@@ -57,12 +57,12 @@ public class MedicineController {
 
 	}
 	
-	@GetMapping("/{medicineId}")
-	public ResponseEntity<ApiResponse> getMedicine(@PathVariable String medicineId) throws SystemException {
+	@GetMapping("/{customerId}")
+	public ResponseEntity<ApiResponse> getCustomer(@PathVariable Long customerId) throws SystemException {
 		try {
-			Medicine medicine = medicineService.getMedince(medicineId);
+			Customer customer = customerService.getCustomer(customerId);
 			return ResponseEntity.status(HttpStatus.OK).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), medicine));
+					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), customer));
 		} catch (SystemException e) {
 	        throw e;
 		} catch (Exception ex) {
@@ -72,13 +72,13 @@ public class MedicineController {
 
 	}
 	
-	@PutMapping("/{medicineId}")
-	public ResponseEntity<ApiResponse> updateMedicine(@RequestBody Medicine updatedMedicine,@PathVariable String medicineId) throws SystemException {
+	@PutMapping("/{customerId}")
+	public ResponseEntity<ApiResponse> updateCustomer(@RequestBody Customer updatedCustomer,@PathVariable Long customerId) throws SystemException {
 		try {
-			Medicine updatedMed = medicineService.updateMedicine(medicineId,updatedMedicine);
+			Customer updatedCust = customerService.updateCustomer(customerId,updatedCustomer);
 			
 			return ResponseEntity.status(HttpStatus.OK).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), updatedMed));
+					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), updatedCust));
 		} catch (SystemException e) {
 	        throw e;
 		} catch (Exception ex) {
@@ -88,18 +88,19 @@ public class MedicineController {
 
 	}
 	
-	@DeleteMapping("/{medicineId}")
-	public ResponseEntity<ApiResponse> deleteMedicine(@PathVariable String medicineId) {
+	@DeleteMapping("/{customerId}")
+	public ResponseEntity<ApiResponse> deleteCustomer(@PathVariable Long customerId) {
 		try {
-			Medicine medicine = medicineService.getMedince(medicineId);
-			medicineService.deleteMedicine(medicineId);
+			Customer customer = customerService.getCustomer(customerId);
+			customerService.deleteCustomer(customerId);
 			return ResponseEntity.status(HttpStatus.OK).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(),"Medicine : " + medicine.getMedicineId()
-					+ "deleted successfully"));
+					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(),"customer " + customer.getName()
+					+ " deleted successfully"));
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
 		}
 
 	}
+
 }
