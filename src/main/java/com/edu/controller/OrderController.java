@@ -14,30 +14,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edu.entity.Customer;
+import com.edu.entity.Order;
 import com.edu.exception.SystemException;
-import com.edu.service.CustomerService;
+import com.edu.service.OrderService;
 import com.edu.utility.ApiResponse;
 import com.edu.utility.RequestValidator;
 import com.edu.utility.StatusType;
 
 @RestController
-@RequestMapping("/api/v1/customer")
-public class CustomerController {
-	
+@RequestMapping("/api/v1/order")
+public class OrderController {
+
 	@Autowired
-	private CustomerService customerService;
+	private OrderService orderService;
 
 	@Autowired
 	private RequestValidator requestValidator;
 
 	@PostMapping("/create")
-	public ResponseEntity<ApiResponse> createCustomer(@RequestBody Customer customer) {
+	public ResponseEntity<ApiResponse> createCustomer(@RequestBody Order order) {
 		try {
-			requestValidator.validateCustomerRequest(customer);
-			Customer createdCustomer = customerService.createCustomer(customer);
-			return ResponseEntity.status(HttpStatus.CREATED).body(
-					new ApiResponse(StatusType.SUCCESS.getName(), "Customer created successfully", createdCustomer));
+			// requestValidator.validateCustomerRequest(customer);
+			Order createdOrder = orderService.createOrder(order);
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new ApiResponse(StatusType.SUCCESS.getName(), "Order created successfully", createdOrder));
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
@@ -47,55 +47,53 @@ public class CustomerController {
 	@GetMapping
 	public ResponseEntity<ApiResponse> getAllCustomer() {
 		try {
-			List<Customer> allCustomers = customerService.getAllCustomer();
+			List<Order> allOrders = orderService.getAllOrders();
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), allCustomers));
+					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), allOrders));
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
 		}
 
 	}
-	
-	@GetMapping("/{customerId}")
-	public ResponseEntity<ApiResponse> getCustomer(@PathVariable Long customerId) throws SystemException {
+
+	@GetMapping("/{orderId}")
+	public ResponseEntity<ApiResponse> getCustomer(@PathVariable Long orderId) throws SystemException {
 		try {
-			Customer customer = customerService.getCustomer(customerId);
-			return ResponseEntity.status(HttpStatus.OK).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), customer));
-		} catch (SystemException e) {
-	        throw e;
+			Order order = orderService.getOrderById(orderId);
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), order));
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
 		}
 
 	}
-	
-	@PutMapping("/{customerId}")
-	public ResponseEntity<ApiResponse> updateCustomer(@RequestBody Customer updatedCustomer,@PathVariable Long customerId) throws SystemException {
+
+	@PutMapping("/{orderId}")
+	public ResponseEntity<ApiResponse> updateCustomer(@RequestBody Order updatedOrder, @PathVariable Long orderId)
+			throws SystemException {
 		try {
-			Customer updatedCust = customerService.updateCustomer(customerId,updatedCustomer);
-			
+			Order updatedOrdr = orderService.updateOrder(orderId, updatedOrder);
+
 			return ResponseEntity.status(HttpStatus.OK).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), updatedCust));
+					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), updatedOrdr));
 		} catch (SystemException e) {
-	        throw e;
+			throw e;
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
 		}
 
 	}
-	
+
 	@DeleteMapping("/{customerId}")
-	public ResponseEntity<ApiResponse> deleteCustomer(@PathVariable Long customerId) {
+	public ResponseEntity<ApiResponse> deleteCustomer(@PathVariable Long orderId) {
 		try {
-			Customer customer = customerService.getCustomer(customerId);
-			customerService.deleteCustomer(customerId);
-			return ResponseEntity.status(HttpStatus.OK).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(),"customer " + customer.getName()
-					+ " deleted successfully"));
+			Order order = orderService.getOrderById(orderId);
+			orderService.deleteOrder(order, orderId);
+			return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(StatusType.SUCCESS.getCode(),
+					StatusType.SUCCESS.getDescription(), "customer " + order.getOrderId() + " deleted successfully"));
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
