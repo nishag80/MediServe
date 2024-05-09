@@ -1,6 +1,5 @@
 package com.edu.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,12 +20,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "order_items")
-public class OrderItem {
+@Table(name = "Items")
+public class Items {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long orderItemid;
+	private Long itemsId;
 
 //	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 //	@JoinColumn(name = "orderId", nullable = false)

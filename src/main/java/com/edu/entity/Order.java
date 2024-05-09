@@ -38,12 +38,12 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long orderId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "customerId", referencedColumnName = "customerId")
 	private Customer customer;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	private Set<OrderItem> orderItems = new HashSet<>();
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	private Set<Items> items = new HashSet<>();
 
 	@Column(nullable = false)
 	private BigDecimal totalAmount;
@@ -59,17 +59,17 @@ public class Order {
 	@Column(name = "updated_date")
 	private LocalDateTime updatedDate;
 
-	public void addOrderItem(OrderItem orderItem) {
-		if (null == orderItems) {
-			orderItems = new HashSet<>();
+	public void addOrderItem(Items orderItem) {
+		if (null == items) {
+			items = new HashSet<>();
 		}
 
-		orderItems.add(orderItem);
+		items.add(orderItem);
 	}
 
-	public void removeOrderItem(OrderItem orderItem) {
+	public void removeOrderItem(Items orderItem) {
 
-		orderItems.remove(orderItem);
+		items.remove(orderItem);
 	}
 
 }

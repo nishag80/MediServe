@@ -2,10 +2,10 @@ package com.edu.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.edu.entity.OrderItem;
+import com.edu.entity.Items;
 
-public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
+public interface OrderItemRepository extends JpaRepository<Items, Long> {
 
-	public OrderItem findByorderItemid(Long orderItemId);
+	public Items findByitemsId(Long orderItemId);
 
 }
