@@ -2,6 +2,7 @@ package com.edu.controller;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,7 @@ public class OrderController {
 	public ResponseEntity<ApiResponse> createCustomer(@RequestBody Order order) {
 		try {
 			// requestValidator.validateCustomerRequest(customer);
+			// Order ord = this.modelMapper.map(order, Order.class);
 			Order createdOrder = orderService.createOrder(order);
 			return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new ApiResponse(StatusType.SUCCESS.getName(), "Order created successfully", createdOrder));
