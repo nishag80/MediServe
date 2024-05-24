@@ -2,6 +2,7 @@ package com.edu.utility;
 
 import org.springframework.stereotype.Component;
 
+import com.edu.entity.Customer;
 import com.edu.entity.Medicine;
 import com.edu.exception.MissingParameterException;
 
@@ -21,6 +22,15 @@ public class RequestValidator {
 //        if (request.getAnalytics() == null || request.getAnalytics().getQuantityLeft() <= 0) {
 //            throw new IllegalArgumentException("quantityLeft must be provided and greater than 0");
 //        }
+    }
+
+    public void validateCustomerRequest(Customer request) {
+        if (request.getName() == null) {
+            throw new MissingParameterException("name");
+        }
+        if (request.getPhoneNumbers() == null) {
+            throw new MissingParameterException("PhoneNumber");
+        }
     }
 
 }

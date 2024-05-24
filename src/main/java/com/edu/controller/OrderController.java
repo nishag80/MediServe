@@ -2,6 +2,7 @@ package com.edu.controller;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,30 +15,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edu.entity.Medicine;
+import com.edu.entity.Order;
 import com.edu.exception.SystemException;
-import com.edu.service.MedicineService;
+import com.edu.service.OrderService;
 import com.edu.utility.ApiResponse;
 import com.edu.utility.RequestValidator;
 import com.edu.utility.StatusType;
 
 @RestController
-@RequestMapping("/api/v1/medicine")
-public class MedicineController {
+@RequestMapping("/api/v1/order")
+public class OrderController {
 
 	@Autowired
-	private MedicineService medicineService;
+	private OrderService orderService;
 
 	@Autowired
 	private RequestValidator requestValidator;
 
 	@PostMapping("/create")
-	public ResponseEntity<ApiResponse> createMedicine(@RequestBody Medicine medicine) {
+	public ResponseEntity<ApiResponse> createCustomer(@RequestBody Order order) {
 		try {
-			requestValidator.validateMedicineRequest(medicine);
-			Medicine createdMedicine = medicineService.createMedicine(medicine);
-			return ResponseEntity.status(HttpStatus.CREATED).body(
-					new ApiResponse(StatusType.SUCCESS.getName(), "Medicine created successfully", createdMedicine));
+			// requestValidator.validateCustomerRequest(customer);
+			// Order ord = this.modelMapper.map(order, Order.class);
+			Order createdOrder = orderService.createOrder(order);
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new ApiResponse(StatusType.SUCCESS.getName(), "Order created successfully", createdOrder));
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
@@ -45,61 +47,60 @@ public class MedicineController {
 	}
 
 	@GetMapping
-	public ResponseEntity<ApiResponse> getAllMedicine() {
+	public ResponseEntity<ApiResponse> getAllCustomer() {
 		try {
-			List<Medicine> allMedicines = medicineService.getAllMedince();
+			List<Order> allOrders = orderService.getAllOrders();
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), allMedicines));
+					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), allOrders));
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
 		}
 
 	}
-	
-	@GetMapping("/{medicineId}")
-	public ResponseEntity<ApiResponse> getMedicine(@PathVariable String medicineId) throws SystemException {
+
+	@GetMapping("/{orderId}")
+	public ResponseEntity<ApiResponse> getCustomer(@PathVariable Long orderId) throws SystemException {
 		try {
-			Medicine medicine = medicineService.getMedince(medicineId);
+			Order order = orderService.getOrderById(orderId);
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), order));
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
+		}
+
+	}
+
+	@PutMapping("/{orderId}")
+	public ResponseEntity<ApiResponse> updateCustomer(@RequestBody Order updatedOrder, @PathVariable Long orderId)
+			throws SystemException {
+		try {
+			Order updatedOrdr = orderService.updateOrder(orderId, updatedOrder);
+
 			return ResponseEntity.status(HttpStatus.OK).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), medicine));
+					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), updatedOrdr));
 		} catch (SystemException e) {
-	        throw e;
+			throw e;
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
 		}
 
 	}
-	
-	@PutMapping("/{medicineId}")
-	public ResponseEntity<ApiResponse> updateMedicine(@RequestBody Medicine updatedMedicine,@PathVariable String medicineId) throws SystemException {
+
+	@DeleteMapping("/{customerId}")
+	public ResponseEntity<ApiResponse> deleteCustomer(@PathVariable Long orderId) {
 		try {
-			Medicine updatedMed = medicineService.updateMedicine(medicineId,updatedMedicine);
-			
-			return ResponseEntity.status(HttpStatus.OK).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), updatedMed));
-		} catch (SystemException e) {
-	        throw e;
+			Order order = orderService.getOrderById(orderId);
+			orderService.deleteOrder(order, orderId);
+			return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(StatusType.SUCCESS.getCode(),
+					StatusType.SUCCESS.getDescription(), "customer " + order.getOrderId() + " deleted successfully"));
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
 		}
 
 	}
-	
-	@DeleteMapping("/{medicineId}")
-	public ResponseEntity<ApiResponse> deleteMedicine(@PathVariable String medicineId) {
-		try {
-			Medicine medicine = medicineService.getMedince(medicineId);
-			medicineService.deleteMedicine(medicineId);
-			return ResponseEntity.status(HttpStatus.OK).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(),"Medicine : " + medicine.getMedicineId()
-					+ "deleted successfully"));
-		} catch (Exception ex) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
-		}
 
-	}
 }
