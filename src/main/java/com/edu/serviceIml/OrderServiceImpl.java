@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
 			totalAmount = totalAmount
 					.add(BigDecimal.valueOf(orderItem.getQuantity()).multiply(orderItem.getMedicine().getPrice()));
 
-			updateMedicineDetail(BigDecimal.valueOf(orderItem.getQuantity()),
+			updateMedicineDetail(orderItem.getQuantity(),orderItem.getMedicine().getPrice(),
 					orderItem.getMedicine().getMedicineId());
 
 		}
@@ -62,9 +62,9 @@ public class OrderServiceImpl implements OrderService {
 		return orderRepo.save(orderDetails);
 	}
 
-	private void updateMedicineDetail(BigDecimal quantity, String medicineId) {
+	private void updateMedicineDetail(Integer quantity, BigDecimal price, String medicineId) {
 
-		medicineRepo.updateSaleAmount(quantity, medicineId);
+		medicineRepo.updateSaleAmount(quantity,price, medicineId);
 
 	}
 
@@ -105,7 +105,7 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void deleteOrder(Order order, Long customerId) throws SystemException {
 		if (order == null) {
-			throw new SystemException(ErrorType.NOT_FOUND, "Invalid customer");
+			throw new SystemException(ErrorType.NOT_FOUND, "Invalid order");
 		}
 		orderRepo.delete(order);
 
