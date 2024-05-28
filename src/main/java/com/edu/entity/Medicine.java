@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "medicines")
+@Table(name = "medicine")
 public class Medicine {
     
 	@Id
@@ -27,6 +27,7 @@ public class Medicine {
 	@GenericGenerator(name = "medicine_id_generator", strategy = "com.edu.service.MedicineIdGenerator")
 	private String medicineId;
     
+	@Column(nullable = false)
     private String name;
     private String description;
     private String manufacturer;
@@ -41,8 +42,15 @@ public class Medicine {
     private String image;
     private String barCode;
     private BigDecimal unitPrice; 
+    @Column(nullable = false)
     private BigDecimal price; 
     private String remark;
+    private BigDecimal totalSaleAmount;
+	private Integer quantitySold;
+	private Integer quantityLeft;
+	private BigDecimal salesRevenue;
+	private LocalDateTime lastSaleDate;
+
     
     @CreationTimestamp
     @Column(name = "created_date", nullable = false, updatable = false)
@@ -51,8 +59,6 @@ public class Medicine {
     @UpdateTimestamp
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
-    
-    @OneToOne(mappedBy = "medicine", cascade = CascadeType.ALL)
-    private MedicineAnalytics analytics;
+ 
 
 }
