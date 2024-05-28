@@ -32,8 +32,8 @@ public class Items {
 //	private Order order;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "medicineId", nullable = false)
-	private Medicine medicine;
+	@JoinColumn(name = "productId", nullable = false)
+	private Product product;
 
 	@Column(nullable = false)
 	private Integer quantity;

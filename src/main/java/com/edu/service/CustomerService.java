@@ -10,13 +10,13 @@ import com.edu.exception.SystemException;
 @Service
 public interface CustomerService {
 
-	public Customer createCustomer(Customer medicine);
+	public Customer createCustomer(Customer customer);
 
 	public Customer getCustomer(Long customerId) throws SystemException;
 
-	public Customer updateCustomer(Long customerId, Customer updatedMedicine) throws SystemException;
+	public Customer updateCustomer(Long customerId, Customer updatedCustomer) throws SystemException;
 
-	public void deleteCustomer(Long medicineId) throws SystemException;
+	public void deleteCustomer(Long productId) throws SystemException;
 
 	List<Customer> getAllCustomer();
 

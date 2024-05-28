@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class ItemDto {
 	
-	public String medicineId;
+	public String productId;
 	public Integer quantity; 
 
 }

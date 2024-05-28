@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.edu.entity.Customer;
 import com.edu.entity.Items;
-import com.edu.entity.Medicine;
+import com.edu.entity.Product;
 import com.edu.entity.Order;
 import com.edu.exception.ErrorType;
 import com.edu.exception.SystemException;
 import com.edu.repository.CustomerRepository;
-import com.edu.repository.MedicineRepository;
+import com.edu.repository.ProductRepository;
 import com.edu.repository.OrderItemRepository;
 import com.edu.repository.OrderRepository;
 import com.edu.service.OrderService;
@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
 	private OrderItemRepository orderItemRepo;
 
 	@Autowired
-	private MedicineRepository medicineRepo;
+	private ProductRepository productRepo;
 
 	@Override
 	public Order createOrder(Order orderDetails) throws SystemException {
@@ -42,14 +42,14 @@ public class OrderServiceImpl implements OrderService {
 		orderDetails.setCustomer(customer);
 		BigDecimal totalAmount = BigDecimal.ZERO;
 		for (Items orderItem : orderDetails.getItems()) {
-			Medicine medicine = medicineRepo.findBymedicineId(orderItem.getMedicine().getMedicineId());
-			orderItem.setMedicine(medicine);
+			Product product = productRepo.findByproductId(orderItem.getProduct().getProductId());
+			orderItem.setProduct(product);
 
 			totalAmount = totalAmount
-					.add(BigDecimal.valueOf(orderItem.getQuantity()).multiply(orderItem.getMedicine().getPrice()));
+					.add(BigDecimal.valueOf(orderItem.getQuantity()).multiply(orderItem.getProduct().getPrice()));
 
-			updateMedicineDetail(orderItem.getQuantity(),orderItem.getMedicine().getPrice(),
-					orderItem.getMedicine().getMedicineId());
+			updateProductDetail(orderItem.getQuantity(),orderItem.getProduct().getPrice(),
+					orderItem.getProduct().getProductId());
 
 		}
 
@@ -62,9 +62,9 @@ public class OrderServiceImpl implements OrderService {
 		return orderRepo.save(orderDetails);
 	}
 
-	private void updateMedicineDetail(Integer quantity, BigDecimal price, String medicineId) {
+	private void updateProductDetail(Integer quantity, BigDecimal price, String productId) {
 
-		medicineRepo.updateSaleAmount(quantity,price, medicineId);
+		productRepo.updateSaleAmount(quantity,price, productId);
 
 	}
 
@@ -92,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
 		existingOrder.setItems(order.getItems());
 		BigDecimal totalAmount = BigDecimal.ZERO;
 		for (Items orderItem : order.getItems()) {
-			totalAmount = totalAmount.add(orderItem.getMedicine().getUnitPrice());
+			totalAmount = totalAmount.add(orderItem.getProduct().getUnitPrice());
 		}
 		existingOrder.setTotalAmount(totalAmount);
 		existingOrder.setStatus(order.getStatus());

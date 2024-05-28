@@ -14,30 +14,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edu.entity.Medicine;
+import com.edu.entity.Product;
 import com.edu.exception.SystemException;
-import com.edu.service.MedicineService;
+import com.edu.service.ProductService;
 import com.edu.utility.ApiResponse;
 import com.edu.utility.RequestValidator;
 import com.edu.utility.StatusType;
 
 @RestController
-@RequestMapping("/api/v1/medicine")
-public class MedicineController {
+@RequestMapping("/api/v1/product")
+public class ProductController {
 
 	@Autowired
-	private MedicineService medicineService;
+	private ProductService productService;
 
 	@Autowired
 	private RequestValidator requestValidator;
 
 	@PostMapping("/create")
-	public ResponseEntity<ApiResponse> createMedicine(@RequestBody Medicine medicine) {
+	public ResponseEntity<ApiResponse> createProduct(@RequestBody Product product) {
 		try {
-			requestValidator.validateMedicineRequest(medicine);
-			Medicine createdMedicine = medicineService.createMedicine(medicine);
+			requestValidator.validateProductRequest(product);
+			Product createdProduct = productService.createProduct(product);
 			return ResponseEntity.status(HttpStatus.CREATED).body(
-					new ApiResponse(StatusType.SUCCESS.getName(), "Medicine created successfully", createdMedicine));
+					new ApiResponse(StatusType.SUCCESS.getName(), "Product created successfully", createdProduct));
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
@@ -45,11 +45,11 @@ public class MedicineController {
 	}
 
 	@GetMapping
-	public ResponseEntity<ApiResponse> getAllMedicine() {
+	public ResponseEntity<ApiResponse> getAllProduct() {
 		try {
-			List<Medicine> allMedicines = medicineService.getAllMedince();
+			List<Product> products = productService.getAllProducts();
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), allMedicines));
+					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), products));
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
@@ -57,12 +57,12 @@ public class MedicineController {
 
 	}
 	
-	@GetMapping("/{medicineId}")
-	public ResponseEntity<ApiResponse> getMedicine(@PathVariable String medicineId) throws SystemException {
+	@GetMapping("/{productId}")
+	public ResponseEntity<ApiResponse> getProduct(@PathVariable String productId) throws SystemException {
 		try {
-			Medicine medicine = medicineService.getMedince(medicineId);
+			Product product = productService.getProduct(productId);
 			return ResponseEntity.status(HttpStatus.OK).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), medicine));
+					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), product));
 		} catch (SystemException e) {
 	        throw e;
 		} catch (Exception ex) {
@@ -72,13 +72,13 @@ public class MedicineController {
 
 	}
 	
-	@PutMapping("/{medicineId}")
-	public ResponseEntity<ApiResponse> updateMedicine(@RequestBody Medicine updatedMedicine,@PathVariable String medicineId) throws SystemException {
+	@PutMapping("/{productId}")
+	public ResponseEntity<ApiResponse> updateProduct(@RequestBody Product updatedProduct,@PathVariable String productId) throws SystemException {
 		try {
-			Medicine updatedMed = medicineService.updateMedicine(medicineId,updatedMedicine);
+			Product updatedProd = productService.updateProduct(productId,updatedProduct);
 			
 			return ResponseEntity.status(HttpStatus.OK).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), updatedMed));
+					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(), updatedProd));
 		} catch (SystemException e) {
 	        throw e;
 		} catch (Exception ex) {
@@ -88,18 +88,18 @@ public class MedicineController {
 
 	}
 	
-	@DeleteMapping("/{medicineId}")
-	public ResponseEntity<ApiResponse> deleteMedicine(@PathVariable String medicineId) {
+	@DeleteMapping("/{productId}")
+	public ResponseEntity<ApiResponse> deleteProduct(@PathVariable String productId) {
 		try {
-			Medicine medicine = medicineService.getMedince(medicineId);
-			medicineService.deleteMedicine(medicineId);
+			Product product = productService.getProduct(productId);
+			productService.deleteProduct(productId);
 			return ResponseEntity.status(HttpStatus.OK).body(
-					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(),"Medicine : " + medicine.getMedicineId()
+					new ApiResponse(StatusType.SUCCESS.getCode(), StatusType.SUCCESS.getDescription(),"Product : " + product.getProductId()
 					+ "deleted successfully"));
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ApiResponse(StatusType.INTERNAL_ERROR.getName(), ex.getMessage(), null));
 		}
-
+	
 	}
 }

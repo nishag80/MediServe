@@ -5,10 +5,10 @@ import org.hibernate.id.IdentifierGenerator;
 
 import java.io.Serializable;
 
-public class MedicineIdGenerator implements IdentifierGenerator {
+public class ProductIdGenerator implements IdentifierGenerator {
 
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object obj) {
-        return "M" + String.valueOf(System.currentTimeMillis());
+        return "P" + String.valueOf(System.currentTimeMillis());
     }
 }

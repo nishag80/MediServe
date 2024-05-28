@@ -11,7 +11,7 @@ public enum ErrorType {
 	INTERNAL_ERROR("ERROR", "Internal server error", "An unexpected error occurred."),
 	MISSING_PARAM ("FAILD", "Parameter Missing", "Parameter is missing in the request."),
 	DECLINED("DECLIEND", "Declined", "The request has been declined by the system."),
-	INVALID_MEDINCINE_ID("FAILD", "Invalid Medicine Id", "Medicine doesn't exist"),
+	INVALID_PRODUCT_ID("FAILD", "Invalid Product Id", "Product doesn't exist"),
 	INVALID_REQUEST("ERROR", "Invalid Request", "Check Request Parameters"),
 	USER_NOT_FOUND("FAILD", "User not found", "The request has been declined by the system."),
 	NOT_FOUND("FAILD", "No Data Found", "The request has been declined by the system.");

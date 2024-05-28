@@ -6,17 +6,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.edu.entity.Customer;
-import com.edu.entity.Medicine;
+import com.edu.entity.Product;
 import com.edu.exception.MissingParameterException;
 
 @Component
 public class RequestValidator {
 	
-    public void validateMedicineRequest(Medicine request) {
-        if (StringUtils.isNotBlank(request.getName())) {
+    public void validateProductRequest(Product request) {
+        if (StringUtils.isBlank(request.getName())) {
             throw new MissingParameterException("name");
         }
-        if (StringUtils.isNotBlank(request.getDescription())) {
+        if (StringUtils.isBlank(request.getDescription())) {
             throw new MissingParameterException("description");
         }
         if (request.getPrice() == null ) {
@@ -28,10 +28,10 @@ public class RequestValidator {
     }
 
     public void validateCustomerRequest(Customer request) {
-        if (StringUtils.isNotBlank(request.getName())) {
+        if (StringUtils.isBlank(request.getName())) {
             throw new MissingParameterException("name");
         }
-        if (StringUtils.isNotBlank(request.getPhoneNumbers())) {
+        if (StringUtils.isBlank(request.getPhoneNumbers())) {
             throw new MissingParameterException("PhoneNumber");
         }
     }

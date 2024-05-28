@@ -8,6 +8,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,15 +20,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "medicine")
-public class Medicine {
+@Table(name = "product")
+public class Product {
     
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "medicine_id_generator")
-	@GenericGenerator(name = "medicine_id_generator", strategy = "com.edu.service.MedicineIdGenerator")
-	private String medicineId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "product_id_generator")
+	@GenericGenerator(name = "product_id_generator", strategy = "com.edu.service.ProductIdGenerator")
+	private String productId;
     
-	@Column(nullable = false)
+	@Column(nullable = false,unique = true)
     private String name;
     private String description;
     private String manufacturer;
