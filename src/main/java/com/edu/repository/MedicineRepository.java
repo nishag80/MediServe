@@ -18,15 +18,22 @@ public interface MedicineRepository extends JpaRepository<Medicine, String> {
 
 	public Medicine findBymedicineId(String medicineId);
 
-	@Transactional
+	@Transactional 
 	@Modifying
 	@Query(value = "UPDATE Medicine "
-            + "SET total_sale_amount = total_sale_amount * :quantity, "
-            + "quantity_sold = quantity_sold + :quantity, "
-            + "quantity_left = quantity_left - :quantity, "
-            + "last_sale_date = NOW() "
-            + "WHERE medicine_id = :productId")
-	public void updateSaleAmount(@Param("quantity")BigDecimal quantity, @Param("productId")String productId);
+	        + "SET total_sale_amount = total_sale_amount + (:unitPrice * :quantity),"
+	        + "sales_revenue =  sales_revenue + (:unitPrice * :quantity),"
+	        + "quantity_sold = quantity_sold + :quantity, "
+	        + "quantity_left = quantity_left - :quantity, "
+	        + "last_sale_date = NOW() "
+	        + "WHERE medicine_id = :productId")
+	public void updateSaleAmount(@Param("quantity") int quantity, 
+	                             @Param("unitPrice") BigDecimal unitPrice, 
+	                             @Param("productId") String productId);
+	
+	 @Query("SELECT SUM(m.totalSaleAmount) FROM Medicine m")
+	 public BigDecimal getTotalSaleAmt();
+
 
 	public List<Medicine> findBymedicineIdIn(List<String> medicineId);
 

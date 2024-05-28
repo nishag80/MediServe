@@ -1,5 +1,8 @@
 package com.edu.utility;
 
+import java.math.BigDecimal;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.edu.entity.Customer;
@@ -10,13 +13,13 @@ import com.edu.exception.MissingParameterException;
 public class RequestValidator {
 	
     public void validateMedicineRequest(Medicine request) {
-        if (request.getName() == null) {
+        if (StringUtils.isNotBlank(request.getName())) {
             throw new MissingParameterException("name");
         }
-        if (request.getDescription() == null) {
+        if (StringUtils.isNotBlank(request.getDescription())) {
             throw new MissingParameterException("description");
         }
-        if (request.getPrice() == null) {
+        if (request.getPrice() == null ) {
             throw new MissingParameterException("price");
         }
 //        if (request.getAnalytics() == null || request.getAnalytics().getQuantityLeft() <= 0) {
@@ -25,10 +28,10 @@ public class RequestValidator {
     }
 
     public void validateCustomerRequest(Customer request) {
-        if (request.getName() == null) {
+        if (StringUtils.isNotBlank(request.getName())) {
             throw new MissingParameterException("name");
         }
-        if (request.getPhoneNumbers() == null) {
+        if (StringUtils.isNotBlank(request.getPhoneNumbers())) {
             throw new MissingParameterException("PhoneNumber");
         }
     }
